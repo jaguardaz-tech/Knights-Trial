@@ -1,0 +1,214 @@
+/* Level Progression System Styles */
+
+/* Level Selector Container */
+.level-selector {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  gap: 15px;
+  padding: 20px;
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  border-radius: 10px;
+  margin: 20px 0;
+}
+
+/* Level Button Styling */
+.level-button {
+  padding: 20px;
+  border: 2px solid #0f3460;
+  border-radius: 8px;
+  background-color: #0f3460;
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  position: relative;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+/* Accessible Level (freigespielt) */
+.level-button.accessible {
+  background: linear-gradient(135deg, #e94560 0%, #d32f56 100%);
+  border-color: #d32f56;
+  box-shadow: 0 4px 12px rgba(233, 69, 96, 0.4);
+}
+
+.level-button.accessible:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 16px rgba(233, 69, 96, 0.5);
+}
+
+.level-button.accessible:active {
+  transform: translateY(-1px);
+}
+
+/* Completed Level */
+.level-button.completed {
+  background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
+  border-color: #27ae60;
+  box-shadow: 0 4px 12px rgba(46, 204, 113, 0.4);
+}
+
+.level-button.completed:hover {
+  transform: scale(1.05);
+  box-shadow: 0 8px 16px rgba(46, 204, 113, 0.5);
+}
+
+.level-button.completed .badge {
+  font-size: 20px;
+  animation: pulse 0.5s ease;
+}
+
+/* Locked Level */
+.level-button.locked {
+  background-color: #555;
+  border-color: #333;
+  cursor: not-allowed;
+  opacity: 0.6;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
+}
+
+.level-button.locked:hover {
+  transform: none;
+  background-color: #555;
+}
+
+.level-button .lock {
+  font-size: 18px;
+}
+
+/* Level Completion Modal */
+.level-completion-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: fadeIn 0.3s ease;
+}
+
+.level-completion-modal .modal-content {
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  padding: 40px 60px;
+  border-radius: 15px;
+  text-align: center;
+  color: white;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.7);
+  animation: slideUp 0.4s ease;
+}
+
+.level-completion-modal h2 {
+  font-size: 48px;
+  margin: 0 0 20px 0;
+  color: #2ecc71;
+  text-shadow: 0 2px 10px rgba(46, 204, 113, 0.3);
+}
+
+.level-completion-modal p {
+  font-size: 24px;
+  margin: 20px 0 40px 0;
+  color: #bbb;
+}
+
+.level-completion-modal .btn-next,
+.level-completion-modal .btn-menu {
+  padding: 12px 30px;
+  margin: 0 10px;
+  font-size: 16px;
+  font-weight: bold;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.level-completion-modal .btn-next {
+  background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
+  color: white;
+}
+
+.level-completion-modal .btn-next:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(46, 204, 113, 0.4);
+}
+
+.level-completion-modal .btn-menu {
+  background: #0f3460;
+  color: white;
+}
+
+.level-completion-modal .btn-menu:hover {
+  background: #1a4d6d;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(50px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+}
+
+/* Progress Bar */
+.progress-bar {
+  width: 100%;
+  height: 8px;
+  background-color: #333;
+  border-radius: 4px;
+  overflow: hidden;
+  margin: 20px 0;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #2ecc71, #27ae60);
+  transition: width 0.3s ease;
+}
+
+/* Stats Display */
+.level-stats {
+  padding: 15px 20px;
+  background: #0f3460;
+  border-radius: 8px;
+  color: white;
+  margin: 20px 0;
+  font-weight: bold;
+  text-align: center;
+}
+
+.level-stats span {
+  font-size: 18px;
+  color: #2ecc71;
+}

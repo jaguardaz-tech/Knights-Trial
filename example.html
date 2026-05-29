@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Knights Trial - Level System Demo</title>
+  <link rel="stylesheet" href="css/level-system.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Arial', sans-serif;
+      background: linear-gradient(135deg, #1a1a2e 0%, #0f3460 100%);
+      color: white;
+      padding: 20px;
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 10px;
+      font-size: 48px;
+      background: linear-gradient(135deg, #2ecc71, #e94560);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .subtitle {
+      text-align: center;
+      color: #bbb;
+      margin-bottom: 40px;
+    }
+
+    .controls {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      margin-bottom: 30px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      padding: 10px 20px;
+      background-color: #0f3460;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: all 0.3s ease;
+    }
+
+    .btn:hover {
+      background-color: #1a4d6d;
+      transform: translateY(-2px);
+    }
+
+    .btn-danger {
+      background-color: #e74c3c;
+    }
+
+    .btn-danger:hover {
+      background-color: #c0392b;
+    }
+
+    .debug-info {
+      background: #1a1a2e;
+      padding: 20px;
+      border-radius: 8px;
+      margin-top: 30px;
+      border-left: 4px solid #2ecc71;
+    }
+
+    .debug-info h3 {
+      color: #2ecc71;
+      margin-bottom: 10px;
+    }
+
+    .debug-info pre {
+      background: #0f3460;
+      padding: 15px;
+      border-radius: 5px;
+      overflow-x: auto;
+      font-size: 12px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>⚔️ Knights Trial</h1>
+    <p class="subtitle">Level Progression System mit localStorage</p>
+
+    <!-- Progress Statistik -->
+    <div class="level-stats">
+      Abgeschlossene Level: <span id="completed-count">0</span> / <span id="total-levels">10</span>
+    </div>
+
+    <!-- Progress Bar -->
+    <div class="progress-bar">
+      <div class="progress-bar-fill" id="progress-fill" style="width: 0%"></div>
+    </div>
+
+    <!-- Level Selector -->
+    <div class="level-selector"></div>
+
+    <!-- Debug Controls -->
+    <div class="controls">
+      <button class="btn" onclick="testLevelCompletion()">Test: Level 1 abschließen</button>
+      <button class="btn" onclick="testMultipleLevels()">Test: Mehrere Level abschließen</button>
+      <button class="btn btn-danger" onclick="resetProgress()">Reset: Alle Level zurücksetzen</button>
+    </div>
+
+    <!-- Debug Info -->
+    <div class="debug-info">
+      <h3>📊 Debug Info</h3>
+      <p>localStorage Key: <code>knights_trial_levels</code></p>
+      <p><button class="btn" onclick="showStorageData()">Anzeigen</button></p>
+      <pre id="storage-display" style="display: none;"></pre>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="js/LevelManager.js"></script>
+  <script src="js/LevelSelector.js"></script>
+  <script src="js/LevelComplete.js"></script>
+
+  <script>
+    /**
+     * Update Progress Display
+     */
+    function updateProgressDisplay() {
+      const completed = levelManager.getCompletedLevelCount();
+      const total = 10;
+      
+      document.getElementById('completed-count').textContent = completed;
+      document.getElementById('total-levels').textContent = total;
+      document.getElementById('progress-fill').style.width = (completed / total * 100) + '%';
+    }
+
+    /**
+     * Test Functions
+     */
+    function testLevelCompletion() {
+      if (!levelManager.isLevelCompleted(1)) {
+        levelManager.completeLevel(1);
+        updateProgressDisplay();
+        const selector = document.querySelector('.level-selector').__selector;
+        if (selector) selector.refreshButtons();
+      } else {
+        alert('Level 1 ist bereits abgeschlossen!');
+      }
+    }
+
+    function testMultipleLevels() {
+      for (let i = 1; i <= 3; i++) {
+        if (!levelManager.isLevelCompleted(i)) {
+          levelManager.completeLevel(i);
+        }
+      }
+      updateProgressDisplay();
+      const selector = document.querySelector('.level-selector').__selector;
+      if (selector) selector.refreshButtons();
+    }
+
+    function resetProgress() {
+      if (confirm('Wirklich alle Level zurücksetzen?')) {
+        levelManager.resetAllLevels();
+        updateProgressDisplay();
+        const selector = document.querySelector('.level-selector').__selector;
+        if (selector) selector.refreshButtons();
+      }
+    }
+
+    function showStorageData() {
+      const display = document.getElementById('storage-display');
+      const data = levelManager.getAllLevelStatus();
+      display.textContent = JSON.stringify(data, null, 2);
+      display.style.display = display.style.display === 'none' ? 'block' : 'none';
+    }
+
+    /**
+     * Initialize on page load
+     */
+    document.addEventListener('DOMContentLoaded', () => {
+      updateProgressDisplay();
+      
+      // Save selector instance for later access
+      const selector = new LevelSelector('.level-selector', 10);
+      document.querySelector('.level-selector').__selector = selector;
+      
+      // Listen for level completion events
+      document.addEventListener('levelManager:levelCompleted', updateProgressDisplay);
+      document.addEventListener('levelManager:levelsReset', updateProgressDisplay);
+    });
+  </script>
+</body>
+</html>
